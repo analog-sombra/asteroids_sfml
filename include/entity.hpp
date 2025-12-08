@@ -17,8 +17,4 @@ public:
     bool isDead;
 };
 
-// Global entities vector
-extern std::vector<std::unique_ptr<Entity>> entities;
-extern std::list<std::unique_ptr<Entity>> toAddList;
-
 #endif // __ENTITY_HPP__

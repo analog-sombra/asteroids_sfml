@@ -5,9 +5,12 @@
 #include "player.hpp"
 #include "entity.hpp"
 #include <algorithm>
+#include <list>
+#include "asteroid.hpp"
 
-// Define global entities vector
-std::vector<std::unique_ptr<Entity>> entities;
+// Define static member variables
+std::vector<std::unique_ptr<Entity>> Game::entities;
+std::list<std::unique_ptr<Entity>> Game::toAddList;
 
 Game::Game()
 {
@@ -18,9 +21,12 @@ void Game::run()
     sf::RenderWindow window(sf::VideoMode({Constants::WINDOW_WIDTH, Constants::WINDOW_HEIGHT}), Constants::WINDOW_TITLE);
     window.setFramerateLimit(Constants::FRAMERATE_LIMIT);
     sf::Clock clock;
-    
-    entities.push_back(std::make_unique<Player>());
-    
+
+    Game::entities.push_back(std::make_unique<Player>());
+    // Game::entities.push_back(std::make_unique<Asteroid>(sf::Vector2f(1, 0)));
+
+    float asteroidSpawnTimer = Constants::ASTEROID_SPAWN_TIME;
+
     // run the program as long as the window is open
     while (window.isOpen())
     {
@@ -33,25 +39,32 @@ void Game::run()
                 window.close();
         }
 
+        Game::toAddList.clear();
+
         window.clear(sf::Color::Black);
-        toAddList.clear();
-        for (size_t i = 0; i < entities.size(); ++i)
+
+        asteroidSpawnTimer -= deltaTime;
+
+        for (size_t i = 0; i < Game::entities.size(); ++i)
         {
-            entities[i]->update(deltaTime);
-            entities[i]->render(window);
+            Game::entities[i]->update(deltaTime);
+            Game::entities[i]->render(window);
         }
 
-        for(auto& entity : toAddList)
+        for (auto &entity : Game::toAddList)
         {
-            entities.push_back(std::move(entity));
+            Game::entities.push_back(std::move(entity));
         }
-        
+
         // Remove dead entities
-        entities.erase(
-            std::remove_if(entities.begin(), entities.end(),
-                [](const std::unique_ptr<Entity>& e) { return e->isDead; }),
-            entities.end()
-        );
+        std::erase_if(Game::entities, [](const auto &e)
+                      { return e->isDead; });
+
+        if (asteroidSpawnTimer <= 0.f)
+        {
+            Game::entities.push_back(std::make_unique<Asteroid>(Asteroid::getRandomDirection(), Asteroid::getRandomPosition()));
+            asteroidSpawnTimer = Constants::ASTEROID_SPAWN_TIME;
+        }
 
         window.display();
     }

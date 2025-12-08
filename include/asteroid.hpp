@@ -1,0 +1,21 @@
+#ifndef __ASTEROID_HPP__
+#define __ASTEROID_HPP__
+#include <SFML/Graphics.hpp>
+#include "entity.hpp"
+
+class Asteroid : public Entity
+{
+public:
+    Asteroid(sf::Vector2f direction, sf::Vector2f position = sf::Vector2f(700, 100));
+    void render(sf::RenderWindow &window) override;
+    void update(float deltaTime) override;
+
+    static sf::Vector2f getRandomDirection();
+    static sf::Vector2f getRandomPosition();
+
+private:
+    sf::VertexArray shape;
+    sf::Vector2f direction;
+};
+
+#endif // __ASTEROID_HPP__

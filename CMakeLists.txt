@@ -19,11 +19,8 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 # Find SFML
 find_package(SFML CONFIG REQUIRED COMPONENTS Graphics Window System)
 
-# Find flecs
-find_package(flecs CONFIG REQUIRED)
-
 # Create executable
 add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/main.cpp  ${SOURCES})
 
 # Link SFML libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics SFML::Window SFML::System flecs::flecs)
+target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics SFML::Window SFML::System)

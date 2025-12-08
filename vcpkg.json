@@ -6,10 +6,6 @@
     {
       "name": "sfml",
       "$comment": "Cross-platform library for OpenGL window creation and input handling"
-    },
-    {
-      "name": "flecs",
-      "$comment": "A fast and lightweight Entity Component System (ECS) for C and C++"
     }
   ]
 }
