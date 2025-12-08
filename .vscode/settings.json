@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "cmath": "cpp",
+        "numbers": "cpp",
+        "atomic": "cpp",
+        "ios": "cpp",
+        "xiosbase": "cpp",
+        "memory": "cpp",
+        "xmemory": "cpp"
+    }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "asteroids",
+  "version": "1.0.0",
+  "description": "OpenGL project using GLFW, GLAD, and fmt libraries for modern C++ development",
+  "dependencies": [
+    {
+      "name": "sfml",
+      "$comment": "Cross-platform library for OpenGL window creation and input handling"
+    },
+    {
+      "name": "flecs",
+      "$comment": "A fast and lightweight Entity Component System (ECS) for C and C++"
+    }
+  ]
+}
