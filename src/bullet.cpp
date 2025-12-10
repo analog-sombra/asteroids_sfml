@@ -6,7 +6,7 @@
 #include "physics.hpp"
 
 Bullet::Bullet(const sf::Vector2f &position, const sf::Vector2f &direction)
-    : Entity(position, 0.f), shape(1.0f), direction(direction), lifetime(Constants::BULLET_LIFETIME)
+    : Entity(position, 0.f), shape(3.0f), direction(direction), lifetime(Constants::BULLET_LIFETIME)
 {
     shape.setFillColor(sf::Color::White);
 }

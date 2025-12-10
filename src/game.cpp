@@ -116,6 +116,8 @@ void Game::run()
 
         window.clear(sf::Color::Black);
 
+        
+
         if (state == MENU)
         {
             window.draw(*menuText);
@@ -133,6 +135,8 @@ void Game::run()
             }
             continue;
         }
+
+       
 
         Game::toAddList.clear();
         asteroidSpawnTimer -= deltaTime;
