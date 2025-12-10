@@ -5,6 +5,7 @@ int main()
 {
 
     Game game;
+    Game::init();
     game.run();
 
     return EXIT_SUCCESS;

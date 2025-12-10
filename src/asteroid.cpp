@@ -8,7 +8,7 @@
 
 Asteroid::Asteroid(sf::Vector2f direction, sf::Vector2f position)
     : Entity(position, 0), shape(sf::PrimitiveType::LineStrip, 12),
-      direction(direction)
+      direction(direction), life(0)
 {
     shape[0].position = sf::Vector2f(-40, 40);
     shape[1].position = sf::Vector2f(-50, 10);
@@ -40,6 +40,7 @@ void Asteroid::render(sf::RenderWindow &window)
 
 void Asteroid::update(float deltaTime)
 {
+    life += deltaTime;
     position += direction * Constants::ASTEROID_SPEED * deltaTime;
     angle += Constants::ASTEROID_SPIN * deltaTime;
 
@@ -82,7 +83,7 @@ sf::Vector2f Asteroid::getRandomPosition()
     return sf::Vector2f(xAxis(gen), yAxis(gen));
 }
 
-const sf::VertexArray& Asteroid::getVertexArray() const
+const sf::VertexArray &Asteroid::getVertexArray() const
 {
     return shape;
 }

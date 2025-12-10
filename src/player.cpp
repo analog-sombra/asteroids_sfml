@@ -3,6 +3,9 @@
 #include <numbers>
 #include "bullet.hpp"
 #include "game.hpp"
+#include "physics.hpp"
+#include "asteroid.hpp"
+
 Player::Player()
     : Entity(sf::Vector2f(500, 500), 0), shape(sf::PrimitiveType::LineStrip, 5),
       shootTimer(0.f)
@@ -17,8 +20,6 @@ Player::Player()
     {
         shape[i].color = sf::Color::White;
     }
-
-    shootSound.emplace(Game::soundBuffers["shoot"]);
 }
 
 void Player::render(sf::RenderWindow &window)
@@ -52,12 +53,34 @@ void Player::update(float deltaTime)
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && shootTimer <= 0.f)
     {
-        shootSound->play();
+        if (Game::shootSound.has_value())
+            Game::shootSound->play();
         shootTimer = Constants::SHOOT_COOLDOWN;
         float radians = angle * (std::numbers::pi / 180.0f);
         // Calculate bullet spawn position at the front of the ship
         sf::Vector2f bulletPos = position + sf::Vector2f(cos(radians) * 20.f, sin(radians) * 20.f);
         // Fire bullet
         Game::toAddList.push_back(std::make_unique<Bullet>(bulletPos, sf::Vector2f(cos(radians), sin(radians))));
+    }
+
+    sf::Transform playerTransform = sf::Transform().translate(position).rotate(sf::degrees(angle));
+    for (size_t i = 0; i < Game::entities.size(); ++i)
+    {
+        if (typeid(*Game::entities[i]) == typeid(Asteroid))
+        {
+            Asteroid *asteroid = dynamic_cast<Asteroid *>(Game::entities[i].get());
+
+            if (asteroid->getLife() < Constants::ASTEROID_HIT_TIME)
+            {
+                continue;
+            }
+            sf::Transform asteroidTransform = sf::Transform().translate(asteroid->position).rotate(sf::degrees(asteroid->angle));
+
+            if (physics::intersects(physics::getTransformedPolygon(shape, playerTransform), physics::getTransformedPolygon(asteroid->getVertexArray(), asteroidTransform)))
+            {
+                Game::gameOver();
+                break;
+            }
+        }
     }
 }

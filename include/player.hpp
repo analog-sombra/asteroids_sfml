@@ -15,7 +15,6 @@ public:
 
 private:
     sf::VertexArray shape;
-    std::optional<sf::Sound> shootSound;
     float shootTimer;
 };
 

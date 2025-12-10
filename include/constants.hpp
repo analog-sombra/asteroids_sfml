@@ -24,6 +24,7 @@ namespace Constants
     constexpr float ASTEROID_WIDTH = 90.0f;
     constexpr float ASTEROID_HEIGHT = 80.0f;
     constexpr float ASTEROID_SPAWN_TIME = 3.0f; // Time interval between asteroid spawns in seconds
+    constexpr float ASTEROID_HIT_TIME = 2.0f;
 
 }
 

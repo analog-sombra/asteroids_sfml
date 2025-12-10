@@ -15,11 +15,12 @@ public:
 
     static sf::Vector2f getRandomDirection();
     static sf::Vector2f getRandomPosition();
-
+    float getLife() const { return life; }
 
 private:
     sf::VertexArray shape;
     sf::Vector2f direction;
+    float life;
 };
 
 #endif // __ASTEROID_HPP__
