@@ -11,9 +11,29 @@
 // Define static member variables
 std::vector<std::unique_ptr<Entity>> Game::entities;
 std::list<std::unique_ptr<Entity>> Game::toAddList;
+size_t Game::score{};
+float Game::asteroidSpawnTimer{};
+std::optional<sf::Text> Game::scoreText;
+sf::Font Game::font;
+std::unordered_map<std::string, sf::SoundBuffer> Game::soundBuffers;
 
 Game::Game()
 {
+    if (!font.openFromFile("C:/Windows/Fonts/arial.ttf")) {
+        // Handle error - font failed to load
+    }
+    
+    // Load sound buffers BEFORE creating entities
+    if (!soundBuffers["shoot"].loadFromFile("../../assets/sounds/shoot.mp3")) {
+        // Handle error - sound failed to load
+    }
+    
+    scoreText.emplace(font);
+    scoreText->setFillColor(sf::Color::White);
+    scoreText->setPosition({10.f, 10.f});
+    scoreText->setCharacterSize(24);
+    Game::entities.push_back(std::make_unique<Player>());
+    asteroidSpawnTimer = Constants::ASTEROID_SPAWN_TIME;
 }
 
 void Game::run()
@@ -22,22 +42,13 @@ void Game::run()
     window.setFramerateLimit(Constants::FRAMERATE_LIMIT);
     sf::Clock clock;
 
-    Game::entities.push_back(std::make_unique<Player>());
-    // Game::entities.push_back(std::make_unique<Asteroid>(sf::Vector2f(1, 0)));
-
-    float asteroidSpawnTimer = Constants::ASTEROID_SPAWN_TIME;
-
     // run the program as long as the window is open
     while (window.isOpen())
     {
+
+        handelEvents(window);
+
         float deltaTime = clock.restart().asSeconds();
-        // check all the window's events that were triggered since the last iteration of the loop
-        while (const std::optional event = window.pollEvent())
-        {
-            // "close requested" event: we close the window
-            if (event->is<sf::Event::Closed>())
-                window.close();
-        }
 
         Game::toAddList.clear();
 
@@ -62,10 +73,24 @@ void Game::run()
 
         if (asteroidSpawnTimer <= 0.f)
         {
-            Game::entities.push_back(std::make_unique<Asteroid>(Asteroid::getRandomDirection(), Asteroid::getRandomPosition()));
+            Game::entities.push_back(std::make_unique<Asteroid>());
             asteroidSpawnTimer = Constants::ASTEROID_SPAWN_TIME;
         }
 
+        scoreText->setString("Score: " + std::to_string(score));
+        window.draw(*scoreText);
         window.display();
     }
+}
+
+void Game::handelEvents(sf::RenderWindow &window)
+{
+    // check all the window's events that were triggered since the last iteration of the loop
+    while (const std::optional event = window.pollEvent())
+    {
+        // "close requested" event: we close the window
+        if (event->is<sf::Event::Closed>())
+            window.close();
+    }
+    // Placeholder for event handling logic
 }

@@ -17,6 +17,8 @@ Player::Player()
     {
         shape[i].color = sf::Color::White;
     }
+
+    shootSound.emplace(Game::soundBuffers["shoot"]);
 }
 
 void Player::render(sf::RenderWindow &window)
@@ -50,6 +52,7 @@ void Player::update(float deltaTime)
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && shootTimer <= 0.f)
     {
+        shootSound->play();
         shootTimer = Constants::SHOOT_COOLDOWN;
         float radians = angle * (std::numbers::pi / 180.0f);
         // Calculate bullet spawn position at the front of the ship

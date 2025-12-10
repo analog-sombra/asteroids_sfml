@@ -17,10 +17,10 @@ file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/src/*.cpp")
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 # Find SFML
-find_package(SFML CONFIG REQUIRED COMPONENTS Graphics Window System)
+find_package(SFML CONFIG REQUIRED COMPONENTS Graphics Window System Audio)
 
 # Create executable
 add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/main.cpp  ${SOURCES})
 
 # Link SFML libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics SFML::Window SFML::System)
+target_link_libraries(${PROJECT_NAME} PRIVATE SFML::Graphics SFML::Window SFML::System SFML::Audio)

@@ -42,6 +42,24 @@ void Asteroid::update(float deltaTime)
 {
     position += direction * Constants::ASTEROID_SPEED * deltaTime;
     angle += Constants::ASTEROID_SPIN * deltaTime;
+
+    if (position.x < Constants::ASTEROID_WIDTH / 2.0f)
+    {
+        direction.x = abs(direction.x);
+    }
+    else if (position.x > Constants::WINDOW_WIDTH - Constants::ASTEROID_WIDTH / 2.0f)
+    {
+        direction.x = -abs(direction.x);
+    }
+
+    if (position.y < Constants::ASTEROID_HEIGHT / 2.0f)
+    {
+        direction.y = abs(direction.y);
+    }
+    else if (position.y > Constants::WINDOW_HEIGHT - Constants::ASTEROID_HEIGHT / 2.0f)
+    {
+        direction.y = -abs(direction.y);
+    }
 }
 
 sf::Vector2f Asteroid::getRandomDirection()
@@ -58,8 +76,13 @@ sf::Vector2f Asteroid::getRandomPosition()
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> distX(0.0f, static_cast<float>(Constants::WINDOW_WIDTH));
-    std::uniform_real_distribution<float> distY(0.0f, static_cast<float>(Constants::WINDOW_HEIGHT));
+    std::uniform_real_distribution<float> xAxis(Constants::ASTEROID_WIDTH / 2.0f, static_cast<float>(Constants::WINDOW_WIDTH) - Constants::ASTEROID_WIDTH / 2.0f);
+    std::uniform_real_distribution<float> yAxis(Constants::ASTEROID_HEIGHT / 2.0f, static_cast<float>(Constants::WINDOW_HEIGHT) - Constants::ASTEROID_HEIGHT / 2.0f);
 
-    return sf::Vector2f(distX(gen), distY(gen));
+    return sf::Vector2f(xAxis(gen), yAxis(gen));
+}
+
+const sf::VertexArray& Asteroid::getVertexArray() const
+{
+    return shape;
 }

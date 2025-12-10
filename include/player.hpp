@@ -2,6 +2,9 @@
 #define __PLAYER_HPP__
 #include <SFML/Graphics.hpp>
 #include "entity.hpp"
+#include <SFML/Audio.hpp>
+#include <optional>
+
 
 class Player : public Entity
 {
@@ -12,6 +15,7 @@ public:
 
 private:
     sf::VertexArray shape;
+    std::optional<sf::Sound> shootSound;
     float shootTimer;
 };
 
